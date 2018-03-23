@@ -9,6 +9,7 @@ const express = require('@feathersjs/express');
 const configuration = require('@feathersjs/configuration');
 const socketio = require('@feathersjs/socketio');
 const distribution = require('../lib');
+const authentication = require('./authentication');
 
 const handler = require('@feathersjs/express/errors');
 // const notFound = require('feathers-errors/not-found');
@@ -39,6 +40,8 @@ app.configure(distribution());
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
 // Set up our services (see `services/index.js`)
+app.configure(authentication);
+
 app.configure(services);
 // Set up channels
 app.configure(channels);
@@ -47,6 +50,9 @@ app.configure(channels);
 // Indeed this middleware is hit first...
 //app.use(notFound());
 app.use(handler());
+
+setInterval(getMessages, 2500);
+function getMessages() { console.log(Object.keys(app.services)) }
 
 app.hooks(appHooks);
 

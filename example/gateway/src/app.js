@@ -9,6 +9,7 @@ const express = require('@feathersjs/express');
 const configuration = require('@feathersjs/configuration');
 const socketio = require('@feathersjs/socketio');
 const distribution = require('../lib');
+const serviceInfo       = require('./docs-info')
 
 const handler = require('@feathersjs/express/errors');
 // const notFound = require('feathers-errors/not-found');
@@ -47,6 +48,7 @@ app.configure(
   })
 );
 
+app.configure(serviceInfo)
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
 app.configure(authentication);
@@ -61,5 +63,10 @@ app.configure(channels);
 app.use(handler());
 
 app.hooks(appHooks);
+
+setInterval(getMessages, 2500);
+function getMessages() { console.log(Object.keys(app.services)) }
+
+
 
 module.exports = app;
